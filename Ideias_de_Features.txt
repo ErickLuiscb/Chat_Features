@@ -1,0 +1,200 @@
+# Sugestões de Features — Projeto Chat React + Node.js
+
+## 👤 Pessoa 1 — Dark Mode
+
+### O que faz:
+
+* adiciona modo escuro no chat
+* botão para alternar entre tema claro e escuro
+* salva preferência do usuário
+
+### Tecnologias:
+
+* useState
+* CSS
+* localStorage
+* manipulação de classes CSS
+
+---
+
+## 👤 Pessoa 2 — Editar Mensagem
+
+### O que faz:
+
+* usuário pode editar mensagem enviada
+* botão editar
+* atualiza mensagem no MongoDB
+
+### Tecnologias:
+
+* PUT route
+* estado React
+* formulário
+* MongoDB update
+
+---
+
+## 👤 Pessoa 3 — Excluir Mensagem
+
+### O que faz:
+
+* usuário pode excluir mensagens enviadas
+* botão de deletar mensagem
+* remove mensagem do MongoDB
+* atualiza chat automaticamente
+
+### Tecnologias:
+
+* DELETE route
+* React state
+* MongoDB deleteOne
+* botão com ícone
+
+---
+
+## 👤 Pessoa 4 — Sistema de Emojis
+
+### O que faz:
+
+* adiciona emojis nas mensagens
+* botão de emoji no chat
+* abre seletor de emojis
+* insere emoji no input automaticamente
+
+### Tecnologias:
+
+* biblioteca emoji-picker-react
+* React Hooks
+* manipulação de input
+* eventos de clique
+
+---
+
+# Sugestões Extras de Features
+
+## ⭐ Scroll Automático
+
+### O que faz:
+
+* chat desce automaticamente para a última mensagem
+
+### Tecnologias:
+
+* useRef
+* useEffect
+* scrollIntoView
+
+---
+
+## ⭐ Status Online/Offline
+
+### O que faz:
+
+* mostra usuários online
+* exibe indicador verde de ativo
+* mostra offline após tempo sem atividade
+
+### Tecnologias:
+
+* polling
+* React state
+* CSS
+* backend timestamp
+
+---
+
+## ⭐ Pesquisa de Mensagens
+
+### O que faz:
+
+* busca mensagens por texto
+* filtra mensagens digitadas
+
+### Tecnologias:
+
+* filter()
+* useState
+* input search
+* renderização dinâmica
+
+---
+
+## ⭐ Mensagem de Sistema
+
+### O que faz:
+
+* exibe mensagens automáticas
+* exemplo:
+
+  * "Usuário entrou no chat"
+  * "Usuário saiu do chat"
+
+### Tecnologias:
+
+* backend route
+* lógica condicional
+* renderização diferenciada
+
+---
+
+## ⭐ Preview de Imagem
+
+### O que faz:
+
+* mostra imagem antes do envio
+* usuário pode confirmar envio
+
+### Tecnologias:
+
+* FileReader
+* useState
+* preview de imagem
+
+---
+
+## ⭐ Contador de Mensagens
+
+### O que faz:
+
+* mostra quantidade de mensagens enviadas
+* contador por usuário ou total
+
+### Tecnologias:
+
+* React state
+* array.length
+* renderização dinâmica
+
+---
+
+# Organização Recomendada GitHub
+
+## Branches
+
+```bash
+feature/darkmode
+feature/edit-message
+feature/delete-message
+feature/emojis
+```
+
+---
+
+# Fluxo Recomendado
+
+1. Clonar o projeto
+2. Criar branch própria
+3. Desenvolver a feature
+4. Fazer commit
+5. Fazer push
+6. Abrir Pull Request
+7. Realizar merge na main
+
+---
+
+# Observações
+
+* Evitar editar os mesmos arquivos simultaneamente
+* Testar a funcionalidade antes do merge
+* Fazer commits pequenos e organizados
+* Sempre atualizar a branch main antes de iniciar novas alterações
