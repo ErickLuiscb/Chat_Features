@@ -77,6 +77,54 @@ app.get("/messages/sync", async (req, res) => {
   }
 });
 
+/* Feature editar mensage  feita por Erick Luis
+adicionando a rota PUT de editar mensagem */
+app.put("/messages/:id", async (req, res) => {
+  try {
+    const updatedMessage = await Messages.findByIdAndUpdate(
+      req.params.id,
+      {
+        message: req.body.message,
+        edited: true,
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).send({
+        message: "Mensagem não encontrada",
+      });
+    }
+
+    res.status(200).send(updatedMessage);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+/* Feature excluir feita por Erick Luis,
+adicionando a rota para deletar um mensagem */
+
+app.delete("/messages/:id", async (req, res) => {
+  try {
+    const deletedMessage = await Messages.findByIdAndDelete(req.params.id);
+
+    if (!deletedMessage) {
+      return res.status(404).send({
+        message: "Mensagem não encontrada",
+      });
+    }
+
+    res.status(200).send({
+      message: "Mensagem excluída com sucesso",
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Upload de imagem
 app.post("/messages/image", upload.single("image"), async (req, res) => {
   try {
