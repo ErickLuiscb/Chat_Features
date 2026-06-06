@@ -6,6 +6,10 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "./axios";
 
@@ -16,6 +20,10 @@ import { useStateValue } from "./StateProvider";
 const Chat = ({ messages }) => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
+
+  /* Feature editar feita por Erick Luis, adicionando as const */
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -65,6 +73,40 @@ const Chat = ({ messages }) => {
     setInput("");
   };
 
+  /* Feature editar/excluir feita por Erick Luis, 
+  adicionando as novas funções de editar e deletar no front */
+  const startEdit = (message) => {
+    setEditingId(message._id);
+    setEditingText(message.message);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  const saveEdit = async (id) => {
+    if (!editingText.trim()) return;
+
+    await axios.put(`/messages/${id}`, {
+      message: editingText,
+    });
+
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  const deleteMessage = async (id) => {
+    const confirmDelete = window.confirm(
+      "Deseja realmente excluir esta mensagem?",
+    );
+
+    if (!confirmDelete) return;
+
+    await axios.delete(`/messages/${id}`);
+  };
+
+  /*--------------------------------------*/
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
@@ -111,10 +153,9 @@ const Chat = ({ messages }) => {
           </IconButton>
         </div>
       </div>
-
       <div className="chat__body">
         {messages.map((message) => (
-          <p
+          <div
             key={message._id}
             className={`chat__message ${
               message.name === user && "chat__receiver"
@@ -122,20 +163,63 @@ const Chat = ({ messages }) => {
           >
             <span className="chat__name">{message.name}</span>
 
-            {message.imageId ? (
-              <img
-                src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
-                alt="Imagem enviada"
-                className="chat__image"
-              />
+            {editingId === message._id ? (
+              <>
+                <input
+                  className="chat__editInput"
+                  value={editingText}
+                  onChange={(e) => setEditingText(e.target.value)}
+                />
+
+                <IconButton size="small" onClick={() => saveEdit(message._id)}>
+                  <CheckIcon />
+                </IconButton>
+
+                <IconButton size="small" onClick={cancelEdit}>
+                  <CloseIcon />
+                </IconButton>
+              </>
             ) : (
-              message.message
+              <>
+                {message.imageId ? (
+                  <img
+                    src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
+                    alt="Imagem enviada"
+                    className="chat__image"
+                  />
+                ) : (
+                  <>
+                    {message.message}
+
+                    {message.edited && (
+                      <small className="chat__edited">(editada)</small>
+                    )}
+                  </>
+                )}
+              </>
             )}
 
             <span className="chat__timestamp">
               {new Date(message.timestamp).toLocaleString()}
             </span>
-          </p>
+
+            {message.name === user &&
+              !message.imageId &&
+              editingId !== message._id && (
+                <div className="chat__actions">
+                  <IconButton size="small" onClick={() => startEdit(message)}>
+                    <EditIcon />
+                  </IconButton>
+
+                  <IconButton
+                    size="small"
+                    onClick={() => deleteMessage(message._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              )}
+          </div>
         ))}
       </div>
 
