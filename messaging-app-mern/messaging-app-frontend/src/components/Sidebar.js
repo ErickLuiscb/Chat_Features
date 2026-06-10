@@ -8,12 +8,14 @@ import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 import ChatIcon from "@mui/icons-material/Chat";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 import { Avatar, IconButton } from "@mui/material";
 
 import axios from "./axios";
 
-const Sidebar = ({ messages }) => {
+const Sidebar = ({ messages, darkMode, setDarkMode }) => {
   const [activeUsers, setActiveUsers] = useState([]);
 
   useEffect(() => {
@@ -40,6 +42,14 @@ const Sidebar = ({ messages }) => {
         <Avatar />
 
         <div className="sidebar__headerRight">
+          <IconButton
+            onClick={() => setDarkMode((currentMode) => !currentMode)}
+            aria-label="Alternar tema"
+            title={darkMode ? "Ativar tema claro" : "Ativar tema escuro"}
+          >
+            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
+
           <IconButton>
             <DonutLargeIcon />
           </IconButton>
