@@ -165,3 +165,25 @@
 .app--dark .chat__footer > .MuiSvgIcon-root {
   color: #d1d5db;
 }
+
+.chat__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.chat__editInput {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  outline: none;
+}
+
+.chat__edited {
+  margin-left: 8px;
+  font-size: 11px;
+  font-style: italic;
+  color: gray;
+}

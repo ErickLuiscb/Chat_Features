@@ -6,6 +6,10 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "./axios";
 
@@ -17,6 +21,10 @@ const Chat = ({ messages, selectedMessageId }) => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  /* Feature editar feita por Erick Luis, adicionando as const */
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   const fileInputRef = useRef(null);
   const messageRefs = useRef({});
@@ -79,7 +87,39 @@ const Chat = ({ messages, selectedMessageId }) => {
 
     setInput("");
   };
+  
+  const startEdit = (message) => {
+    setEditingId(message._id);
+    setEditingText(message.message);
+  };
 
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  const saveEdit = async (id) => {
+    if (!editingText.trim()) return;
+
+    await axios.put(`/messages/${id}`, {
+      message: editingText,
+    });
+
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  const deleteMessage = async (id) => {
+    const confirmDelete = window.confirm(
+      "Deseja realmente excluir esta mensagem?",
+    );
+
+    if (!confirmDelete) return;
+
+    await axios.delete(`/messages/${id}`);
+  };
+
+  /*--------------------------------------*/
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
@@ -148,15 +188,13 @@ const Chat = ({ messages, selectedMessageId }) => {
           </IconButton>
         </div>
       </div>
-
       <div className="chat__body">
         {filteredMessages.length && (
           filteredMessages.map((message) => (
-          <>
+          <div key={message._id}>
             {message.system && (<div>{message.message}</div>)}
             {!message.system && (
               <p
-                key={message._id}
                 ref={(element) => {
                 messageRefs.current[message._id] = element;
               }}
@@ -165,7 +203,6 @@ const Chat = ({ messages, selectedMessageId }) => {
                 }`}
               >
                 <span className="chat__name">{message.name}</span>
-
                 {message.imageId ? (
                   <img
                     src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
@@ -173,15 +210,53 @@ const Chat = ({ messages, selectedMessageId }) => {
                     className="chat__image"
                   />
                 ) : (
-                  message.message
-                )}
+                  <>
+                  {editingId === message._id ? (
+                    <>
+                      <input
+                        className="chat__editInput"
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                      />
 
-                <span className="chat__timestamp">
-                  {new Date(message.timestamp).toLocaleString()}
-                </span>
+                      <IconButton size="small" onClick={() => saveEdit(message._id)}>
+                        <CheckIcon />
+                      </IconButton>
+
+                      <IconButton size="small" onClick={cancelEdit}>
+                        <CloseIcon />
+                      </IconButton>
+                    </>
+                ) : (
+                    {message.message}
+                    {message.edited && (
+                      <small className="chat__edited">(editada)</small>
+                    )}
+                )}
               </p>
             )}
-          </>
+
+            <span className="chat__timestamp">
+              {new Date(message.timestamp).toLocaleString()}
+            </span>
+
+            {message.name === user &&
+              !message.imageId &&
+              editingId !== message._id && (
+                <div className="chat__actions">
+                  <IconButton size="small" onClick={() => startEdit(message)}>
+                    <EditIcon />
+                  </IconButton>
+
+                  <IconButton
+                    size="small"
+                    onClick={() => deleteMessage(message._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              )}
+          </div>
         )))}
       </div>
 
