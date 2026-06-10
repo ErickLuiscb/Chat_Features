@@ -8,6 +8,10 @@ const messagingSchema = mongoose.Schema({
   imageId: String,
   cid: String,
   system: Boolean,
+  edited: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 export default mongoose.model("messagingmessages", messagingSchema);
