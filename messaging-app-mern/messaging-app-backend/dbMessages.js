@@ -7,7 +7,7 @@ const messagingSchema = mongoose.Schema({
   received: Boolean,
   imageId: String,
   cid: String,
-  system: Boolean
+  system: Boolean,
 });
 
 export default mongoose.model("messagingmessages", messagingSchema);

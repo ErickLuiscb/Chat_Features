@@ -23,6 +23,23 @@
   box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.95);
 }
 
+.login {
+  background-color: #f8f8f8;
+}
+
+.login__container {
+  background-color: white;
+}
+
+.app--dark .login {
+  background-color: #0f172a;
+  color: #e5e7eb;
+}
+.app--dark .login__container {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
 html,
 body {
   margin: 0;

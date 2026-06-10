@@ -1,21 +1,31 @@
-import React from "react";
 import { FormControl, Input, Button, Box } from "@mui/material";
 import { actionTypes } from "./Reducer";
 import { useStateValue } from "./StateProvider";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 const Login = () => {
   const [, dispatch] = useStateValue();
+  const [darkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const cidKey = 'cid';
+    const cidKey = "cid";
 
     let cid = sessionStorage.getItem(cidKey);
     if (!cid) {
       const arr = crypto.getRandomValues(new Uint8Array(16));
-      cid = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
-      sessionStorage.setItem(cidKey, cid)
+      cid = Array.from(arr)
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      sessionStorage.setItem(cidKey, cid);
     }
 
     dispatch({
@@ -51,6 +61,7 @@ const Login = () => {
               placeholder="Digite seu usuario"
               autoFocus="true"
               type="text"
+              sx={{ color: "gray" }}
             />
           </FormControl>
           <Button type="submit" variant="contained">
