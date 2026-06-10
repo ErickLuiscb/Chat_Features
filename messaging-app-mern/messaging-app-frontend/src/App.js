@@ -11,6 +11,7 @@ import { useStateValue } from "./components/StateProvider";
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [selectedMessageId, setSelectedMessageId] = useState("");
 
   const [{ user }] = useStateValue();
 
@@ -40,8 +41,8 @@ function App() {
         <Login />
       ) : (
         <div className="app__body">
-          <Sidebar messages={messages} />
-          <Chat messages={messages} />
+          <Sidebar messages={messages} onSelectMessage={setSelectedMessageId} />
+          <Chat messages={messages} selectedMessageId={selectedMessageId} />
         </div>
       )}
     </div>

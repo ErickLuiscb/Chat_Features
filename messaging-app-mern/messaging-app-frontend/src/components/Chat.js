@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, IconButton } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -13,13 +13,27 @@ import "./Chat.css";
 
 import { useStateValue } from "./StateProvider";
 
-const Chat = ({ messages }) => {
+const Chat = ({ messages, selectedMessageId }) => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fileInputRef = useRef(null);
+  const messageRefs = useRef({});
 
   const [{ user }] = useStateValue();
+
+  const filteredMessages = searchTerm.trim()
+    ? messages.filter((message) => {
+        const term = searchTerm.trim().toLowerCase();
+        const messageText = message.message
+          ? message.message.toLowerCase()
+          : "";
+        const messageName = message.name ? message.name.toLowerCase() : "";
+
+        return messageText.includes(term) || messageName.includes(term);
+      })
+    : messages;
 
   const openFileSelector = () => {
     fileInputRef.current.click();
@@ -69,6 +83,21 @@ const Chat = ({ messages }) => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
 
+  useEffect(() => {
+    if (!selectedMessageId) {
+      return;
+    }
+
+    const selectedMessageElement = messageRefs.current[selectedMessageId];
+
+    if (selectedMessageElement) {
+      selectedMessageElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [selectedMessageId, filteredMessages]);
+
   return (
     <div className="chat">
       <div className="chat__header">
@@ -90,9 +119,16 @@ const Chat = ({ messages }) => {
         </div>
 
         <div className="chat__headerRight">
-          <IconButton>
+          <div className="chat__searchContainer">
             <SearchIcon />
-          </IconButton>
+
+            <input
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Filtrar mensagens"
+              type="text"
+              value={searchTerm}
+            />
+          </div>
 
           <input
             ref={fileInputRef}
@@ -113,30 +149,39 @@ const Chat = ({ messages }) => {
       </div>
 
       <div className="chat__body">
-        {messages.map((message) => (
-          <p
-            key={message._id}
-            className={`chat__message ${
-              message.name === user && "chat__receiver"
-            }`}
-          >
-            <span className="chat__name">{message.name}</span>
+        {filteredMessages.length > 0 ? (
+          filteredMessages.map((message) => (
+            <p
+              key={message._id}
+              ref={(element) => {
+                messageRefs.current[message._id] = element;
+              }}
+              className={`chat__message ${
+                message._id === selectedMessageId
+                  ? "chat__message--selected"
+                  : ""
+              } ${message.name === user && "chat__receiver"}`}
+            >
+              <span className="chat__name">{message.name}</span>
 
-            {message.imageId ? (
-              <img
-                src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
-                alt="Imagem enviada"
-                className="chat__image"
-              />
-            ) : (
-              message.message
-            )}
+              {message.imageId ? (
+                <img
+                  src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
+                  alt="Imagem enviada"
+                  className="chat__image"
+                />
+              ) : (
+                message.message
+              )}
 
-            <span className="chat__timestamp">
-              {new Date(message.timestamp).toLocaleString()}
-            </span>
-          </p>
-        ))}
+              <span className="chat__timestamp">
+                {new Date(message.timestamp).toLocaleString()}
+              </span>
+            </p>
+          ))
+        ) : (
+          <p className="chat__emptySearch">Nenhuma mensagem encontrada.</p>
+        )}
       </div>
 
       <div className="chat__footer">
