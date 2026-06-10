@@ -16,12 +16,10 @@ import { useStateValue } from "./StateProvider";
 const Chat = ({ messages }) => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
-  // XXX: Dumb
-  const [firstTime, setFirstTime] = useState(true);
 
   const fileInputRef = useRef(null);
 
-  const [{ user }] = useStateValue();
+  const [{ user, cid }] = useStateValue();
 
   const openFileSelector = () => {
     fileInputRef.current.click();
@@ -50,7 +48,6 @@ const Chat = ({ messages }) => {
     });
 
     e.target.value = "";
-    setFirstTime(false)
   };
 
   const sendMessage = async (e) => {
@@ -63,11 +60,10 @@ const Chat = ({ messages }) => {
       name: user,
       timestamp: new Date(),
       received: true,
-      firstMessage: firstTime
+      cid
     });
 
     setInput("");
-    setFirstTime(false)
   };
 
   useEffect(() => {
@@ -120,29 +116,31 @@ const Chat = ({ messages }) => {
       <div className="chat__body">
         {messages.map((message) => (
           <>
-            {message.firstMessage && (<div>Bem vindo ~{message.name}</div>)}
-            <p
-              key={message._id}
-              className={`chat__message ${
-                message.name === user && "chat__receiver"
-              }`}
-            >
-              <span className="chat__name">{message.name}</span>
+            {message.system && (<div>{message.message}</div>)}
+            {!message.system && (
+              <p
+                key={message._id}
+                className={`chat__message ${
+                  message.name === user && "chat__receiver"
+                }`}
+              >
+                <span className="chat__name">{message.name}</span>
 
-              {message.imageId ? (
-                <img
-                  src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
-                  alt="Imagem enviada"
-                  className="chat__image"
-                />
-              ) : (
-                message.message
-              )}
+                {message.imageId ? (
+                  <img
+                    src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
+                    alt="Imagem enviada"
+                    className="chat__image"
+                  />
+                ) : (
+                  message.message
+                )}
 
-              <span className="chat__timestamp">
-                {new Date(message.timestamp).toLocaleString()}
-              </span>
-            </p>
+                <span className="chat__timestamp">
+                  {new Date(message.timestamp).toLocaleString()}
+                </span>
+              </p>
+            )}
           </>
         ))}
       </div>
