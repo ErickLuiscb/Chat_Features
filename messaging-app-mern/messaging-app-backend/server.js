@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 import Cors from "cors";
 import express from "express";
 import Messages from "./dbMessages.js";
+import UserSeen from './userSeenSchema.js';
 import multer from "multer";
 import { Readable } from "stream";
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 // App Config
 const app = express();
@@ -43,6 +46,21 @@ const upload = multer({
   },
 });
 
+const markFirstSeen = async (name, cid) => {
+  try {
+    await UserSeen.create({ name, cid });
+
+    return true
+  } catch (err) {
+    // chave duplicada
+    if (err.code === 11000) {
+      return false
+    }
+
+    throw err;
+  }
+}
+
 // API Endpoints
 app.get("/", (req, res) => {
   res.status(200).send("Hello TheWebDev");
@@ -51,15 +69,30 @@ app.get("/", (req, res) => {
 // Nova mensagem
 app.post("/messages/new", async (req, res) => {
   try {
+    const { name, cid } = req.body;
+    const timestamp = new Date()
+
     const dbMessage = {
       ...req.body,
-      timestamp: new Date(),
+      timestamp
     };
+
+    const first = await markFirstSeen(name, cid || null);
+
+    if (first) {
+      const sys = await Messages.create({
+        name,
+        message: `Buenas, ~${name} entrou`,
+        system: true,
+        timestamp
+      });
+    }
 
     const savedMessage = await Messages.create(dbMessage);
 
     res.status(201).send(savedMessage);
   } catch (error) {
+    console.log(error)
     res.status(500).send(error);
   }
 });
@@ -201,6 +234,30 @@ app.get("/messages/actives", async (req, res) => {
     });
 
     res.status(200).send(activeUsers);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Rotas, pesquisa (Diogo)
+app.get("/messages/search", async (req, res) => {
+  try {
+    const query = String(req.query.query || "").trim();
+
+    if (!query) {
+      return res.status(200).send([]);
+    }
+
+    const safeQuery = escapeRegExp(query);
+    const searchRegex = new RegExp(safeQuery, "i");
+
+    const messages = await Messages.find({
+      $or: [{ message: searchRegex }, { name: searchRegex }],
+    }).sort({
+      timestamp: 1,
+    });
+
+    res.status(200).send(messages);
   } catch (error) {
     res.status(500).send(error);
   }
