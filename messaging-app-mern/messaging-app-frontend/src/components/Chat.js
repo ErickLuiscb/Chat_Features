@@ -82,12 +82,12 @@ const Chat = ({ messages, selectedMessageId }) => {
       name: user,
       timestamp: new Date(),
       received: true,
-      cid
+      cid,
     });
 
     setInput("");
   };
-  
+
   const startEdit = (message) => {
     setEditingId(message._id);
     setEditingText(message.message);
@@ -189,75 +189,85 @@ const Chat = ({ messages, selectedMessageId }) => {
         </div>
       </div>
       <div className="chat__body">
-        {filteredMessages.length && (
+        {filteredMessages.length &&
           filteredMessages.map((message) => (
-          <div key={message._id}>
-            {message.system && (<div>{message.message}</div>)}
-            {!message.system && (
-              <p
-                ref={(element) => {
-                messageRefs.current[message._id] = element;
-              }}
-                className={`chat__message ${
-                  message.name === user && "chat__receiver"
-                }`}
-              >
-                <span className="chat__name">{message.name}</span>
-                {message.imageId ? (
-                  <img
-                    src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
-                    alt="Imagem enviada"
-                    className="chat__image"
-                  />
-                ) : (
-                  <>
-                  {editingId === message._id ? (
+            <div key={message._id}>
+              {message.system && <div>{message.message}</div>}
+              {!message.system && (
+                <p
+                  ref={(element) => {
+                    messageRefs.current[message._id] = element;
+                  }}
+                  className={`chat__message ${
+                    message.name === user && "chat__receiver"
+                  }`}
+                >
+                  <span className="chat__name">{message.name}</span>
+                  {message.imageId ? (
+                    <img
+                      src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
+                      alt="Imagem enviada"
+                      className="chat__image"
+                    />
+                  ) : (
                     <>
-                      <input
-                        className="chat__editInput"
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                      />
+                      {editingId === message._id ? (
+                        <>
+                          <input
+                            className="chat__editInput"
+                            value={editingText}
+                            onChange={(e) => setEditingText(e.target.value)}
+                          />
 
-                      <IconButton size="small" onClick={() => saveEdit(message._id)}>
-                        <CheckIcon />
-                      </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => saveEdit(message._id)}
+                          >
+                            <CheckIcon />
+                          </IconButton>
 
-                      <IconButton size="small" onClick={cancelEdit}>
-                        <CloseIcon />
-                      </IconButton>
+                          <IconButton size="small" onClick={cancelEdit}>
+                            <CloseIcon />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          {message.message}
+                          {message.edited && (
+                            <small className="chat__edited">(editada)</small>
+                          )}
+
+                          <span className="chat__timestamp">
+                            {new Date(message.timestamp).toLocaleString()}
+                          </span>
+
+                          {message.name === user &&
+                            !message.imageId &&
+                            editingId !== message._id && (
+                              <div className="chat__actions">
+                                <IconButton
+                                  size="small"
+                                  onClick={() => startEdit(message)}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+
+                                <IconButton
+                                  size="small"
+                                  onClick={() => deleteMessage(message._id)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </div>
+                            )}
+                        </>
+                      )}
                     </>
-                ) : (
-                    {message.message}
-                    {message.edited && (
-                      <small className="chat__edited">(editada)</small>
-                    )}
-                )}
-              </p>
-            )}
-
-            <span className="chat__timestamp">
-              {new Date(message.timestamp).toLocaleString()}
-            </span>
-
-            {message.name === user &&
-              !message.imageId &&
-              editingId !== message._id && (
-                <div className="chat__actions">
-                  <IconButton size="small" onClick={() => startEdit(message)}>
-                    <EditIcon />
-                  </IconButton>
-
-                  <IconButton
-                    size="small"
-                    onClick={() => deleteMessage(message._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
+                  )}
+                </p>
               )}
-          </div>
-        )))}
+            </div>
+          ))}
       </div>
 
       <div className="chat__footer">
