@@ -50,6 +50,9 @@ app.get("/", (req, res) => {
 
 // Nova mensagem
 app.post("/messages/new", async (req, res) => {
+  // Ideal fazer um check/filtro pra ver se o usuário já mandou alguma mensagem
+  // antes. Porém, tal qual o IRC, não tem muita verificação da existencia dum
+  // usuario, já que todo o sistema é efemero
   try {
     const dbMessage = {
       ...req.body,
