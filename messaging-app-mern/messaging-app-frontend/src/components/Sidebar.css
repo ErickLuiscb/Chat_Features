@@ -101,3 +101,8 @@
   color: gray;
   font-size: 13px;
 }
+
+.app--dark .sidebar__searchResult {
+  background: #111827;
+  color: white;
+}

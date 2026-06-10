@@ -64,6 +64,13 @@
   color: #e5e7eb;
 }
 
+.app--dark .chat__searchContainer {
+  background-color: #111827;
+}
+.app--dark .chat__searchContainer > input {
+  color: white;
+}
+
 .chat__body {
   flex: 1;
   background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
@@ -89,12 +96,12 @@
 .chat__message--selected {
   box-shadow: 0 0 0 2px #25d366;
 }
-  
+
 .app--dark .chat__message {
   background-color: #1f2937;
   color: #f9fafb;
 }
-  
+
 .chat__receiver {
   margin-left: auto;
   background-color: #dcf8c6;
@@ -156,7 +163,7 @@
   padding: 10px;
   color: gray;
 }
-  
+
 .chat__emptySearch {
   padding: 20px;
   color: gray;
