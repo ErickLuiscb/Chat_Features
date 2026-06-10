@@ -6,7 +6,8 @@ const messagingSchema = mongoose.Schema({
   timestamp: Date,
   received: Boolean,
   imageId: String,
-  firstMessage: Boolean
+  cid: String,
+  system: Boolean
 });
 
 export default mongoose.model("messagingmessages", messagingSchema);
