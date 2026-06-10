@@ -2,12 +2,22 @@
   display: flex;
   flex-direction: column;
   flex: 0.35;
+  background-color: white;
+}
+.app--dark .sidebar {
+  background-color: #111827;
+  color: #e5e7eb;
 }
 .sidebar__header {
   display: flex;
   justify-content: space-between;
   padding: 20px;
   border-right: 1px solid lightgray;
+  background-color: #ededed;
+}
+.app--dark .sidebar__header {
+  background-color: #1f2937;
+  border-right-color: #374151;
 }
 .sidebar__headerRight {
   display: flex;
@@ -19,12 +29,18 @@
   margin-right: 2vw;
   font-size: 24px !important;
 }
+.app--dark .sidebar .MuiIconButton-root {
+  color: #e5e7eb;
+}
 .sidebar__search {
   display: flex;
   align-items: center;
   background-color: #f6f6f6;
   height: 39px;
   padding: 10px;
+}
+.app--dark .sidebar__search {
+  background-color: #111827;
 }
 .sidebar__searchContainer {
   display: flex;
@@ -34,12 +50,25 @@
   height: 35px;
   border-radius: 20px;
 }
+.app--dark .sidebar__searchContainer {
+  background-color: #374151;
+}
 .sidebar__searchContainer > .MuiSvgIcon-root {
   color: gray;
   padding: 10px;
+}
+.app--dark .sidebar__searchContainer > .MuiSvgIcon-root {
+  color: #d1d5db;
 }
 .sidebar__searchContainer > input {
   border: none;
   outline-width: 0;
   margin-left: 10px;
+  background-color: transparent;
+}
+.app--dark .sidebar__searchContainer > input {
+  color: #f9fafb;
+}
+.app--dark .sidebar__searchContainer > input::placeholder {
+  color: #cbd5e1;
 }

@@ -11,8 +11,15 @@ import { useStateValue } from "./components/StateProvider";
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
 
   const [{ user }] = useStateValue();
+
+  useEffect(() => {
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -35,12 +42,16 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? "app--dark" : ""}`}>
       {!user ? (
         <Login />
       ) : (
         <div className="app__body">
-          <Sidebar messages={messages} />
+          <Sidebar
+            messages={messages}
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+          />
           <Chat messages={messages} />
         </div>
       )}
