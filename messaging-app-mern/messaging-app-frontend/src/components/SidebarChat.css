@@ -3,18 +3,33 @@
   background-color: white;
   overflow: scroll;
 }
+.app--dark .sidebar__chats {
+  background-color: #111827;
+}
 .sidebarChat {
   display: flex;
   padding: 20px;
   cursor: pointer;
   border-bottom: 1px solid #f6f6f6;
 }
+.app--dark .sidebarChat {
+  border-bottom-color: #374151;
+}
 .sidebarChat:hover {
   background-color: #ebebeb;
+}
+.app--dark .sidebarChat:hover {
+  background-color: #1f2937;
 }
 .sidebarChat__info > h2 {
   font-size: 16px;
   margin-bottom: 8px;
+}
+.app--dark .sidebarChat__info > h2 {
+  color: #f9fafb;
+}
+.app--dark .sidebarChat__info > p {
+  color: #cbd5e1;
 }
 .sidebarChat__info {
   margin-left: 15px;

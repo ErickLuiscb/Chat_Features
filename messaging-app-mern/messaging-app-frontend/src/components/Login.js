@@ -8,10 +8,26 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    const cidKey = 'cid';
+
+    let cid = sessionStorage.getItem(cidKey);
+    if (!cid) {
+      const arr = crypto.getRandomValues(new Uint8Array(16));
+      cid = Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+      sessionStorage.setItem(cidKey, cid)
+    }
+
     dispatch({
       type: actionTypes.SET_USER,
       user: data.get("user"),
     });
+
+    dispatch({
+      type: actionTypes.SET_CID,
+      cid: cid,
+    });
+
     console.log("Nome digitado2: ", data.get("user"));
   };
   return (

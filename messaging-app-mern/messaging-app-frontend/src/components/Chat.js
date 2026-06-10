@@ -21,7 +21,7 @@ const Chat = ({ messages, selectedMessageId }) => {
   const fileInputRef = useRef(null);
   const messageRefs = useRef({});
 
-  const [{ user }] = useStateValue();
+  const [{ user, cid }] = useStateValue();
 
   const filteredMessages = searchTerm.trim()
     ? messages.filter((message) => {
@@ -74,6 +74,7 @@ const Chat = ({ messages, selectedMessageId }) => {
       name: user,
       timestamp: new Date(),
       received: true,
+      cid
     });
 
     setInput("");
@@ -149,39 +150,39 @@ const Chat = ({ messages, selectedMessageId }) => {
       </div>
 
       <div className="chat__body">
-        {filteredMessages.length > 0 ? (
+        {filteredMessages.length && (
           filteredMessages.map((message) => (
-            <p
-              key={message._id}
-              ref={(element) => {
+          <>
+            {message.system && (<div>{message.message}</div>)}
+            {!message.system && (
+              <p
+                key={message._id}
+                ref={(element) => {
                 messageRefs.current[message._id] = element;
               }}
-              className={`chat__message ${
-                message._id === selectedMessageId
-                  ? "chat__message--selected"
-                  : ""
-              } ${message.name === user && "chat__receiver"}`}
-            >
-              <span className="chat__name">{message.name}</span>
+                className={`chat__message ${
+                  message.name === user && "chat__receiver"
+                }`}
+              >
+                <span className="chat__name">{message.name}</span>
 
-              {message.imageId ? (
-                <img
-                  src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
-                  alt="Imagem enviada"
-                  className="chat__image"
-                />
-              ) : (
-                message.message
-              )}
+                {message.imageId ? (
+                  <img
+                    src={`http://127.0.0.1:9000/messages/image/${message.imageId}`}
+                    alt="Imagem enviada"
+                    className="chat__image"
+                  />
+                ) : (
+                  message.message
+                )}
 
-              <span className="chat__timestamp">
-                {new Date(message.timestamp).toLocaleString()}
-              </span>
-            </p>
-          ))
-        ) : (
-          <p className="chat__emptySearch">Nenhuma mensagem encontrada.</p>
-        )}
+                <span className="chat__timestamp">
+                  {new Date(message.timestamp).toLocaleString()}
+                </span>
+              </p>
+            )}
+          </>
+        )))}
       </div>
 
       <div className="chat__footer">

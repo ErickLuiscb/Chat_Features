@@ -2,12 +2,22 @@
   display: flex;
   flex-direction: column;
   flex: 0.65;
+  background-color: #f8f8f8;
+}
+.app--dark .chat {
+  background-color: #111827;
+  color: #e5e7eb;
 }
 .chat__header {
   padding: 20px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid lightgray;
+  background-color: #ededed;
+}
+.app--dark .chat__header {
+  background-color: #1f2937;
+  border-bottom-color: #374151;
 }
 .chat__headerInfo {
   flex: 1;
@@ -20,6 +30,7 @@
 .chat__headerInfo > p {
   color: gray;
 }
+
 .chat__headerRight {
   display: flex;
   align-items: center;
@@ -45,6 +56,14 @@
   background: transparent;
   width: 100%;
 }
+
+.app--dark .chat__headerInfo > p {
+  color: #cbd5e1;
+}
+.app--dark .chat .MuiIconButton-root {
+  color: #e5e7eb;
+}
+
 .chat__body {
   flex: 1;
   background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
@@ -52,6 +71,10 @@
   background-position: center;
   padding: 30px;
   overflow: scroll;
+}
+.app--dark .chat__body {
+  background-color: #0f172a;
+  background-blend-mode: multiply;
 }
 .chat__message {
   position: relative;
@@ -62,21 +85,39 @@
   background-color: #ffffff;
   margin-bottom: 30px;
 }
+
 .chat__message--selected {
   box-shadow: 0 0 0 2px #25d366;
 }
+  
+.app--dark .chat__message {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+  
 .chat__receiver {
   margin-left: auto;
   background-color: #dcf8c6;
 }
+.app--dark .chat__receiver {
+  background-color: #075e54;
+  color: #f9fafb;
+}
 .chat__timestamp {
   margin-left: 10px;
   font-size: x-small;
+  color: #667781;
+}
+.app--dark .chat__timestamp {
+  color: #d1d5db;
 }
 .chat__name {
   top: -15px;
   font-weight: 800;
   font-size: x-small;
+}
+.app--dark .chat__name {
+  color: #bfdbfe;
 }
 .chat__footer {
   display: flex;
@@ -84,6 +125,11 @@
   align-items: center;
   height: 62px;
   border-top: 1px solid lightgray;
+  background-color: #f0f2f5;
+}
+.app--dark .chat__footer {
+  background-color: #1f2937;
+  border-top-color: #374151;
 }
 .chat__footer > form {
   flex: 1;
@@ -96,6 +142,13 @@
   padding: 10px;
   border: none;
 }
+.app--dark .chat__footer > form > input {
+  background-color: #374151;
+  color: #f9fafb;
+}
+.app--dark .chat__footer > form > input::placeholder {
+  color: #cbd5e1;
+}
 .chat__footer > form > button {
   display: none;
 }
@@ -103,7 +156,12 @@
   padding: 10px;
   color: gray;
 }
+  
 .chat__emptySearch {
   padding: 20px;
   color: gray;
+}
+
+.app--dark .chat__footer > .MuiSvgIcon-root {
+  color: #d1d5db;
 }
