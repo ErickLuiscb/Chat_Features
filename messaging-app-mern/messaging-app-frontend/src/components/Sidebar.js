@@ -41,6 +41,11 @@ const Sidebar = ({ messages, onSelectMessage }) => {
 
     if (!trimmedSearch) {
       setSearchResults([]);
+
+      if (onSelectMessage) {
+        onSelectMessage("");
+      }
+
       return;
     }
 
