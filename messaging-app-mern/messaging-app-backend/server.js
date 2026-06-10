@@ -6,6 +6,8 @@ import UserSeen from './userSeenSchema.js';
 import multer from "multer";
 import { Readable } from "stream";
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // App Config
 const app = express();
 const port = process.env.PORT || 9000;
@@ -184,6 +186,30 @@ app.get("/messages/actives", async (req, res) => {
     });
 
     res.status(200).send(activeUsers);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Rotas, pesquisa (Diogo)
+app.get("/messages/search", async (req, res) => {
+  try {
+    const query = String(req.query.query || "").trim();
+
+    if (!query) {
+      return res.status(200).send([]);
+    }
+
+    const safeQuery = escapeRegExp(query);
+    const searchRegex = new RegExp(safeQuery, "i");
+
+    const messages = await Messages.find({
+      $or: [{ message: searchRegex }, { name: searchRegex }],
+    }).sort({
+      timestamp: 1,
+    });
+
+    res.status(200).send(messages);
   } catch (error) {
     res.status(500).send(error);
   }

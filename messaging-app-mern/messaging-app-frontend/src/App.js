@@ -11,6 +11,7 @@ import { useStateValue } from "./components/StateProvider";
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [selectedMessageId, setSelectedMessageId] = useState("");
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
@@ -51,8 +52,10 @@ function App() {
             messages={messages}
             darkMode={darkMode}
             setDarkMode={setDarkMode}
+            onSelectMessage={setSelectedMessageId}
           />
-          <Chat messages={messages} />
+          
+          <Chat messages={messages} selectedMessageId={selectedMessageId} />
         </div>
       )}
     </div>

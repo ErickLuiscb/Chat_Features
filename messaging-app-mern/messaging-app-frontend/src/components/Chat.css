@@ -30,12 +30,40 @@
 .chat__headerInfo > p {
   color: gray;
 }
+
+.chat__headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat__searchContainer {
+  display: flex;
+  align-items: center;
+  background-color: #f6f6f6;
+  border-radius: 999px;
+  padding: 0 12px;
+  min-width: 240px;
+  height: 39px;
+}
+.chat__searchContainer > .MuiSvgIcon-root {
+  color: gray;
+  margin-right: 8px;
+  font-size: 20px;
+}
+.chat__searchContainer > input {
+  border: none;
+  outline-width: 0;
+  background: transparent;
+  width: 100%;
+}
+
 .app--dark .chat__headerInfo > p {
   color: #cbd5e1;
 }
 .app--dark .chat .MuiIconButton-root {
   color: #e5e7eb;
 }
+
 .chat__body {
   flex: 1;
   background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
@@ -57,10 +85,16 @@
   background-color: #ffffff;
   margin-bottom: 30px;
 }
+
+.chat__message--selected {
+  box-shadow: 0 0 0 2px #25d366;
+}
+  
 .app--dark .chat__message {
   background-color: #1f2937;
   color: #f9fafb;
 }
+  
 .chat__receiver {
   margin-left: auto;
   background-color: #dcf8c6;
@@ -122,6 +156,12 @@
   padding: 10px;
   color: gray;
 }
+  
+.chat__emptySearch {
+  padding: 20px;
+  color: gray;
+}
+
 .app--dark .chat__footer > .MuiSvgIcon-root {
   color: #d1d5db;
 }
