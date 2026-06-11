@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Avatar, IconButton } from "@mui/material";
+import EmojiPicker from "emoji-picker-react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -25,11 +26,15 @@ const Chat = ({ messages, selectedMessageId }) => {
   /* Feature editar feita por Erick Luis, adicionando as const */
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [openEmoji, setOpenEmoji] = useState(false);
 
   const fileInputRef = useRef(null);
   const messageRefs = useRef({});
 
   const [{ user, cid }] = useStateValue();
+  const openEmojiPicker = () => {
+    setOpenEmoji(!openEmoji);
+  };
 
   const filteredMessages = searchTerm.trim()
     ? messages.filter((message) => {
@@ -271,7 +276,25 @@ const Chat = ({ messages, selectedMessageId }) => {
       </div>
 
       <div className="chat__footer">
-        <InsertEmoticonIcon />
+        <IconButton size="small" onClick={openEmojiPicker}>
+          <InsertEmoticonIcon />
+        </IconButton>
+        {openEmoji && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "100%", // Força o componente a ficar acima da div pai
+              marginBottom: "10px", // Espaçamento entre o botão e o picker
+              zIndex: 1000, // Garante que fique por cima de outros elementos
+            }}
+          >
+            <EmojiPicker
+              onEmojiClick={(emojiObject) =>
+                setInput(input + emojiObject.emoji)
+              }
+            />
+          </div>
+        )}
 
         <form>
           <input

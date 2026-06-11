@@ -133,6 +133,7 @@
   height: 62px;
   border-top: 1px solid lightgray;
   background-color: #f0f2f5;
+  position: relative;
 }
 .app--dark .chat__footer {
   background-color: #1f2937;
